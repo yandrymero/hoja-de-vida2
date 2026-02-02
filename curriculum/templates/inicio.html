@@ -89,7 +89,7 @@ body{background:#eef1f5;font-family:'Segoe UI',sans-serif;}
 <div class="card card-custom p-4 text-center">
 
 {% if perfil.foto %}
-<img src="{{ perfil.foto.url }}" class="avatar mx-auto mb-3">
+<img src="{% static 'perfil.jpg' %}">
 {% endif %}
 
 <h4 class="fw-bold">Mero Delgado Yandry Javier </h4>
