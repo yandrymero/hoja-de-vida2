@@ -1,0 +1,342 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Hoja de Vida | Yandry Mero</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body{background:#eef1f5;font-family:'Segoe UI',sans-serif;}
+.header{background:linear-gradient(135deg,#0a2540,#0d6efd);color:white;padding:30px;}
+.card-custom{border:none;border-radius:18px;box-shadow:0 12px 30px rgba(0,0,0,.1);}
+.avatar{width:160px;height:160px;object-fit:cover;border-radius:50%;border:6px solid #0d6efd;}
+.section-title{font-weight:700;margin-top:45px;margin-bottom:25px;color:#0a2540;border-bottom:3px solid #0d6efd;display:inline-block;}
+.item-card{padding:18px;background:#f9fbfd;border-radius:14px;border-left:5px solid #0d6efd;margin-bottom:18px;}
+.garage-img{height:200px;object-fit:cover;border-radius:18px 18px 0 0;}
+/* === IMPRESIÓN / PDF === */
+@media print{
+  .no-print{
+    display:none !important;
+  }
+
+  .btn{
+    display:none !important;
+  }
+
+  .print-only{
+    display:block !important;
+  }
+}
+
+/* === PANTALLA NORMAL === */
+.print-only{
+  display:none;
+}
+
+/* === SOLO ORDENAR DATOS PERSONALES === */
+.card-custom p{
+  margin-bottom:6px;
+  text-align:left;
+}
+
+.card-custom p strong{
+  font-weight:700;   /* negrilla para Correo, Cédula, etc */
+}
+
+/* Centrar título Datos personales */
+.card-custom p.fw-bold{
+  text-align:center;
+}
+
+/* === BOTÓN VER EN LÍNEA === */
+.btn-ver{
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #0d6efd;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-ver:hover{
+  background-color: #0a58ca;
+  color: #fff;
+}
+
+
+</style>
+</head>
+
+<body id="cv">
+
+<div class="header no-print d-flex justify-content-between align-items-center">
+<div>
+<h3 class="m-0 fw-bold">Yandry Mero</h3>
+<small>Hoja de Vida</small>
+</div>
+<a href="{% url 'admin:index' %}" class="btn btn-outline-light btn-sm">Panel Admin</a>
+</div>
+
+<div class="container my-5">
+<div class="row">
+
+<div class="col-lg-4 mb-4">
+<div class="card card-custom p-4 text-center">
+
+{% if perfil.foto %}
+<img src="{{ perfil.foto.url }}" class="avatar mx-auto mb-3">
+{% endif %}
+
+<h4 class="fw-bold">Mero Delgado Yandry Javier </h4>
+<p class="text-muted">Ingeniería en Tecnologías de la Información (en proceso)</p>
+<hr>
+<p class="fw-bold">Datos personales :</p>
+<p><strong>Correo electronico :</strong> yandrymero18@gmail.com</p>
+<p><strong>Contacto:</strong> 0996477163</p>
+<p><strong>Cédula:</strong> 1317318846</p>
+<p><strong>Nacionalidad:</strong> Ecuatoriano </p>
+<p><strong>Fecha de Nacimiento:</strong> 04 mayo 2005</p>
+<p><strong>Lugar de Nacimiento:</strong> Jaramijo</p>
+<p><strong>Genero:</strong> Masculino</p>
+<p><strong>Estado civil:</strong> Soltero</p>
+<button class="btn btn-primary w-100 mt-3 no-print" onclick="mostrarOpciones()">Descargar PDF</button>
+
+</div>
+</div>
+
+<div class="col-lg-8">
+
+<div id="seccion-cursos" class="seccion">
+<h5 class="section-title">Cursos Realizados</h5>
+{% for c in cursos %}
+<div class="item-card">
+<strong>{{ c.nombre }}</strong><br>
+<small>{{ c.institucion }} | {{ c.fecha }}</small>
+
+{% if c.imagen %}
+<br>
+{% if c.imagen %}
+
+<!-- BOTÓN SOLO EN PANTALLA -->
+<a href="{{ c.imagen.url }}"
+   target="_blank"
+   class="btn btn-sm btn-outline-primary mt-2 no-print">
+   Ver certificado
+</a>
+
+<!-- IMAGEN SOLO EN PDF -->
+<img src="{{ c.imagen.url }}"
+     class="img-fluid mt-2 print-only"
+     style="max-height:300px;">
+
+{% endif %}
+
+{% endif %}
+</div>
+{% empty %}
+<p>No hay cursos.</p>
+{% endfor %}
+
+
+<div id="seccion-experiencia" class="seccion">
+<h5 class="section-title">Experiencia Laboral</h5>
+{% for e in experiencias %}
+<div class="item-card"><strong>{{ e.puesto }}</strong><br><small>{{ e.empresa }} | {{ e.fecha }}</small></div>
+{% empty %}<p>No hay experiencia.</p>{% endfor %}
+</div>
+
+<div id="seccion-reconocimientos" class="seccion">
+<h5 class="section-title">Reconocimientos</h5>
+{% for r in reconocimientos %}
+<div class="item-card">
+<strong>{{ r.titulo }}</strong>
+<span class="badge bg-primary">{{ r.fecha }}</span>
+
+{% if r.imagen %}
+<br>
+<a href="{{ r.imagen.url }}" target="_blank" class="btn btn-sm btn-outline-primary mt-2">
+Ver certificado
+</a>
+{% endif %}
+</div>
+{% empty %}
+<p>No hay reconocimientos.</p>
+{% endfor %}
+
+<div id="seccion-productos" class="seccion">
+<h5 class="section-title">Productos Académicos</h5>
+
+<div class="row">
+{% for p in productos_academicos %}
+  <div class="col-md-6 mb-3">
+    <div class="card card-custom">
+
+      {% if p.imagen %}
+  <img src="{{ p.imagen.url }}" class="garage-img no-print">
+{% endif %}
+
+
+
+      <div class="card-body">
+        <h6>{{ p.titulo }}</h6>
+        <p>{{ p.descripcion }}</p>
+
+        {% if p.link %}
+          <a href="{{ p.link }}" target="_blank" class="btn btn-sm btn-outline-primary">
+            Ver en línea
+          </a>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+{% empty %}
+<p>No hay productos académicos.</p>
+{% endfor %}
+</div>
+</div>
+
+
+
+
+
+
+<div id="seccion-productos-laborales" class="seccion">
+<h5 class="section-title">Productos Laborales</h5>
+
+<div class="row">
+{% for pl in productos_laborales %}
+  <div class="col-md-6 mb-3">
+    <div class="card card-custom">
+
+      {% if pl.imagen %}
+  <img src="{{ pl.imagen.url }}" class="garage-img no-print">
+{% endif %}
+
+
+      <div class="card-body">
+        <h6>{{ pl.titulo }}</h6>
+        <p class="mt-2">{{ pl.descripcion }}</p>
+
+        {% if pl.link %}
+          <a href="{{ pl.link }}" target="_blank" class="btn btn-sm btn-outline-success">
+            Ver proyecto
+          </a>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+{% empty %}
+<p>No hay productos laborales.</p>
+{% endfor %}
+</div>
+</div>
+
+
+
+<div id="seccion-garaje" class="seccion">
+<h5 class="section-title">Venta de Garaje</h5>
+<div class="row">
+{% for v in ventas %}
+<div class="col-md-6 mb-3">
+<div class="card card-custom">
+{% if v.imagen %}
+  <img src="{{ v.imagen.url }}" class="garage-img no-print">
+{% endif %}
+
+
+<div class="card-body">
+<h6>{{ v.nombre }}</h6>
+<p>{{ v.descripcion }}</p>
+<span class="badge bg-success">${{ v.precio }}</span>
+</div>
+</div>
+</div>
+{% empty %}<p>No hay ventas.</p>{% endfor %}
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="modal fade no-print" id="pdfModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Seleccionar secciones</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="seccion-cursos" checked>
+          <label class="form-check-label">Cursos</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="seccion-experiencia" checked>
+          <label class="form-check-label">Experiencia</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="seccion-reconocimientos">
+          <label class="form-check-label">Reconocimientos</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="seccion-productos">
+          <label class="form-check-label">Productos Académicos</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="seccion-productos-laborales">
+          <label class="form-check-label">Productos Laborales</label>
+        </div>
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" value="seccion-garaje">
+          <label class="form-check-label">Venta de Garaje</label>
+        </div>
+
+        <button class="btn btn-primary w-100" onclick="imprimirSeleccion()">
+          Generar PDF
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function mostrarOpciones(){
+ new bootstrap.Modal(document.getElementById('pdfModal')).show();
+}
+
+function imprimirSeleccion(){
+ let seleccion = document.querySelectorAll('#pdfModal input:checked');
+ let todas = document.querySelectorAll('.seccion');
+
+ todas.forEach(s=>s.style.display='none');
+ seleccion.forEach(c=>{
+   document.getElementById(c.value).style.display='block';
+ });
+
+ window.print();
+
+ todas.forEach(s=>s.style.display='block');
+}
+</script>
+
+</body>
+</html>
