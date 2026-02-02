@@ -25,7 +25,12 @@ SECRET_KEY = 'django-insecure-v1c%1qz$j32%p7k#q$n5anypub5he5+a6ja5-7sdb4znu8-^^u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'hoja-de-vida2.onrender.com',
+    'localhost',
+    '127.0.0.1'
+]
+
 
 
 # Application definition
