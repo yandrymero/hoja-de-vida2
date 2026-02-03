@@ -33,8 +33,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'curriculum',
+    'cloudinary',
+    'cloudinary_storage',
 ]
-
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # ========================
 # MIDDLEWARE
 # ========================
@@ -111,13 +113,17 @@ USE_TZ = True
 # ========================
 # STATIC FILES (RENDER)
 # ========================
+import os
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# STATIC
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# MEDIA
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # ========================
 # DEFAULT PK
