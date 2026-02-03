@@ -67,8 +67,9 @@ body{background:#eef1f5;font-family:'Segoe UI',sans-serif;}
 
 <!-- FOTO FUNCIONANDO EN RENDER -->
 <div class="perfil-header">
-  {% if perfil.foto %}
-    <img src="{{ perfil.foto.url }}" class="foto-perfil">
+{% if perfil.foto %}
+    <img src="{{ perfil.foto.url }}" class="avatar">
+{% endif %}
       <h3 class="nombre-perfil">Mero Delgado Yandry Javier</h3>
 </div>
 
